@@ -10,7 +10,7 @@ def _select_image():
 	
 	filename = input("Enter file name : ")
 	try:
-		file_path = os.path.join(os.getcwd(), "images/", filename)
+		file_path = os.path.join(os.getcwd(), filename)
 		user_image = Image.open(file_path)
 	except:
 		print("Image not found")
