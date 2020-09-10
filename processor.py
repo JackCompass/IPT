@@ -1,5 +1,5 @@
 from PIL import Image
-
+import filterx
 class Picture:
 
 	def __init__(self, image):
@@ -17,10 +17,11 @@ class Picture:
 		print("2-> Resize")
 		print("3-> Spread Effect")
 		print("4-> Save")
+		print("5-> Filter")
 
 
 		choice = int(input("choice : "))
-		if choice < 1 or choice > 4:
+		if choice < 1 or choice > 5:
 			raise ValueError
 		else:
 			self._image_controller(choice)
@@ -33,12 +34,14 @@ class Picture:
 		elif choice == 3:
 			self.spread_effect()
 		elif choice == 4:
-			self.save()
+			self._save()
+		elif choice == 5:
+			self._filter()
 
-	def save():
+	def _save(self):
 		filename = input("Save File as (filename) : ")
-		self.save(filename, format = 'jpeg')
-		self._image_controller()
+		self.image.save(filename, format = self.image.format)
+		self.options()
 
 	def rotate(self):
 		try:
@@ -46,17 +49,23 @@ class Picture:
 		except ValueError:
 			print("Invalid input")
 		else:
-			self.image.rotate(rotate_angle).show()
+			self.image = self.image.rotate(rotate_angle)
+			self.image.show()
 			self.options()
 
 	def resize(self):
 		print(f"Original Size : {self.current_size}")
 		height, width = input("Enter resize size : ").split(" ")
 		size = (int(width), int(height))
-		self.image.resize(size, resample = 3).show()
+		self.image = self.image.resize(size, resample = 3)
+		self.image.show()
 		self.options()
 
 	def spread_effect(self):
 		spread_distance = int(input("Spread Effect : "))
-		self.image.effect_spread(spread_distance).show()
+		self.image = self.image.effect_spread(spread_distance)
+		self.image.show()
 		self.options()
+
+	def _filter(self):
+		filterx.Filter(self.image)
