@@ -1,5 +1,6 @@
 from PIL import ImageFilter
 import random
+import utility
 
 class Filter:
 
@@ -16,10 +17,11 @@ class Filter:
 		print("1-> Edge Enhance")
 		print("2-> Distortion")
 		print("3-> Gaussian Blur")
-		
+		print("4-> Kernel")
+
 
 		choice = int(input("choice : "))
-		if choice < 1 or choice > 3:
+		if choice < 1 or choice > 4:
 			raise ValueError
 		else:
 			self._filter_controller(choice)
@@ -31,10 +33,13 @@ class Filter:
 			self.Distortion()
 		elif choice == 3:
 			self.gaussian()
+		elif choice == 4:
+			self.kernel()
 
 	def _Blur(self):
-		self.image = self.image.filter(ImageFilter.EDGE_ENHANCE)
-		self.image.show()
+		self.image.filter(ImageFilter.EDGE_ENHANCE).show()
+		if utility.savechanges():
+			self.image = self.image.filter(ImageFilter.EDGE_ENHANCE)
 		self.Options()
 
 	def Distortion(self):
@@ -45,8 +50,9 @@ class Filter:
 			total *= num
 		while True:
 			table = [round(random.random(), 2) for i in range(0, 3 * total)]
-			self.image = self.image.filter(ImageFilter.Color3DLUT(table_size, table))
-			self.image.show()
+			self.image.filter(ImageFilter.Color3DLUT(table_size, table)).show()
+			if utility.savechanges():
+				self.image = self.image.filter(ImageFilter.Color3DLUT(table_size, table))
 			check = int(input("Enter 0 for exit : "))
 			if not check:
 				break
@@ -69,7 +75,15 @@ class Filter:
 
 	def gaussian(self):
 		radius = int(input("Radius : "))
-		self.image = self.image.filter(ImageFilter.GaussianBlur(radius))
-		self.image.show()
+		self.image.filter(ImageFilter.GaussianBlur(radius)).show()
+		if utility.savechanges():
+			self.image = self.image.filter(ImageFilter.GaussianBlur(radius))
+		self.Options()
+
+	def kernel(self):
+		kernel = utility.apply_kernel()
+		self.image.filter(ImageFilter.Kernel((3,3), kernel)).show()
+		if utility.savechanges():
+			self.image = self.image.filter(ImageFilter.Kernel((3,3), kernel))
 		self.Options()
 

@@ -1,5 +1,6 @@
 from PIL import Image
 import filterx
+import utility
 class Picture:
 
 	def __init__(self, image):
@@ -49,22 +50,25 @@ class Picture:
 		except ValueError:
 			print("Invalid input")
 		else:
-			self.image = self.image.rotate(rotate_angle)
-			self.image.show()
+			self.image.rotate(rotate_angle).show()
+			if utility.savechanges():
+				self.image = self.image.rotate(rotate_angle)
 			self.options()
 
 	def resize(self):
 		print(f"Original Size : {self.current_size}")
 		height, width = input("Enter resize size : ").split(" ")
 		size = (int(width), int(height))
-		self.image = self.image.resize(size, resample = 3)
-		self.image.show()
+		self.image.resize(size, resample = 3).show()
+		if utility.savechanges():
+			self.image = self.image.resize(size, resample = 3)
 		self.options()
 
 	def spread_effect(self):
 		spread_distance = int(input("Spread Effect : "))
-		self.image = self.image.effect_spread(spread_distance)
-		self.image.show()
+		self.image.effect_spread(spread_distance).show()
+		if utility.savechanges():
+			self.image = self.image.effect_spread(spread_distance)
 		self.options()
 
 	def _filter(self):
