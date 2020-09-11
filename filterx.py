@@ -1,4 +1,4 @@
-from PIL import ImageFilter
+from PIL import ImageFilter, ImageOps
 import random
 import utility
 
@@ -18,10 +18,12 @@ class Filter:
 		print("2-> Distortion")
 		print("3-> Gaussian Blur")
 		print("4-> Kernel")
+		print("5-> MinFilter")
+		print("6-> Greyscale")
 
 
 		choice = int(input("choice : "))
-		if choice < 1 or choice > 4:
+		if choice < 1 or choice > 6:
 			raise ValueError
 		else:
 			self._filter_controller(choice)
@@ -35,6 +37,10 @@ class Filter:
 			self.gaussian()
 		elif choice == 4:
 			self.kernel()
+		elif choice == 5:
+			self.minfilter()
+		elif choice == 6:
+			self.greyscale()
 
 	def _Blur(self):
 		self.image.filter(ImageFilter.EDGE_ENHANCE).show()
@@ -85,5 +91,18 @@ class Filter:
 		self.image.filter(ImageFilter.Kernel((3,3), kernel)).show()
 		if utility.savechanges():
 			self.image = self.image.filter(ImageFilter.Kernel((3,3), kernel))
+		self.Options()
+
+	def minfilter(self):
+		self.image.filter(ImageFilter.MinFilter(size = 3)).show()
+		if utility.savechanges():
+			self.image = self.image.filter(ImageFilter.MinFilter(size = 3))
+		self.Options()
+
+	def greyscale(self):
+		cutoff = int(input("cutoff : "))
+		ImageOps.autocontrast(self.image, cutoff).show()
+		if utility.savechanges():
+			self.image = ImageOps.autocontrast(self.image, cutoff)
 		self.Options()
 
