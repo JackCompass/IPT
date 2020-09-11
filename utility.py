@@ -57,3 +57,18 @@ def apply_kernel():
 					raise ValueError("Input must be a list of 9 values")
 
 				return kernel
+
+def check(size):
+		try:
+			_, _, _ = size
+		except ValueError as e:
+			raise ValueError(
+				"Size should be either an integer or a tuple of three integers."
+			) from e
+		except TypeError:
+			size = (size, size, size)
+		size = [int(x) for x in size]
+		for size1D in size:
+			if not 0 <= size1D <= 265:
+				raise ValueError("Size should be in [0, 265] range.")
+		return size

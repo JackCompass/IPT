@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageOps
 import filterx
 import utility
 class Picture:
@@ -19,10 +19,14 @@ class Picture:
 		print("3-> Spread Effect")
 		print("4-> Save")
 		print("5-> Filter")
+		print("6-> Flip")
+		print("7-> Invert")
+		print("8-> Mirror")
+		print("9-> Add Border")
 
 
 		choice = int(input("choice : "))
-		if choice < 1 or choice > 5:
+		if choice < 1 or choice > 9:
 			raise ValueError
 		else:
 			self._image_controller(choice)
@@ -38,6 +42,14 @@ class Picture:
 			self._save()
 		elif choice == 5:
 			self._filter()
+		elif choice == 6:
+			self.flip()
+		elif choice == 7:
+			self._invert()
+		elif choice == 8:
+			self._mirror()
+		elif choice == 9:
+			self.border()
 
 	def _save(self):
 		filename = input("Save File as (filename) : ")
@@ -73,3 +85,30 @@ class Picture:
 
 	def _filter(self):
 		filterx.Filter(self.image)
+
+	def flip(self):
+		ImageOps.flip(self.image).show()
+		if utility.savechanges():
+			self.image = ImageOps.flip(self.image)
+		self.options()
+
+	def _invert(self):
+		ImageOps.invert(self.image).show()
+		if utility.savechanges():
+			self.image = ImageOps.invert(self.image)
+		self.options()
+
+	def _mirror(self):
+		ImageOps.mirror(self.image).show()
+		if utility.savechanges():
+			self.image = ImageOps.mirror(self.image)
+		self.options()
+
+	def border(self):
+		width = int(input("Border width : "))
+		color = list(input("Colour : ").split(" "))
+		color = tuple(utility.check(color))
+		ImageOps.expand(self.image, width, fill = color).show()
+		if utility.savechanges():
+			self.image = ImageOps.expand(self.image, width, fill = color)
+		self.options()

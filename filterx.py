@@ -20,10 +20,10 @@ class Filter:
 		print("4-> Kernel")
 		print("5-> MinFilter")
 		print("6-> Greyscale")
-
+		print("7-> Solarize")
 
 		choice = int(input("choice : "))
-		if choice < 1 or choice > 6:
+		if choice < 1 or choice > 7:
 			raise ValueError
 		else:
 			self._filter_controller(choice)
@@ -41,6 +41,8 @@ class Filter:
 			self.minfilter()
 		elif choice == 6:
 			self.greyscale()
+		elif choice == 7:
+			self.Solarize()
 
 	def _Blur(self):
 		self.image.filter(ImageFilter.EDGE_ENHANCE).show()
@@ -106,3 +108,11 @@ class Filter:
 			self.image = ImageOps.autocontrast(self.image, cutoff)
 		self.Options()
 
+	def Solarize(self):
+		threshold = int(input("Threshold : "))
+		ImageOps.solarize(self.image, threshold).show()
+		if utility.savechanges():
+			self.image = ImageOps.Solarize(self.image, threshold)
+		self.Options()
+
+	
