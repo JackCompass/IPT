@@ -1,6 +1,7 @@
 from PIL import Image, ImageOps
 import filterx
 import utility
+import os
 class Picture:
 
 	def __init__(self, image):
@@ -23,10 +24,11 @@ class Picture:
 		print("7-> Invert")
 		print("8-> Mirror")
 		print("9-> Add Border")
+		print("10-> Merge")
 
 
 		choice = int(input("choice : "))
-		if choice < 1 or choice > 9:
+		if choice < 1 or choice > 10:
 			raise ValueError
 		else:
 			self._image_controller(choice)
@@ -50,9 +52,11 @@ class Picture:
 			self._mirror()
 		elif choice == 9:
 			self.border()
+		elif choice == 10:
+			self.merge()
 
 	def _save(self):
-		filename = input("Save File as (filename) : ")
+		filename = input("Save File as (filename + extension) : ")
 		self.image.save(filename, format = self.image.format)
 		self.options()
 
@@ -112,3 +116,31 @@ class Picture:
 		if utility.savechanges():
 			self.image = ImageOps.expand(self.image, width, fill = color)
 		self.options()
+
+	def merge(self):
+		file_name = input("Enter filename : ")
+		new_size = list()
+		try:
+			path = os.path.join(os.getcwd(), file_name)
+			join_image = Image.open(path)
+		except:
+			print("Image not found")
+			self.options()
+		else:
+			if self.image.width < join_image.width:
+				new_size.append(self.image.width)
+			else:
+				new_size.append(join_image.width)
+			if self.image.height < join_image.height:
+				new_size.append(self.image.height)
+			else:
+				new_size.append(join_image.height)
+
+			new_image = Image.new("RGB", (2*new_size[0], new_size[1]), (250, 250, 250))
+			new_image.paste(self.image.resize(new_size, resample = 3), (0, 0))
+			new_image.paste(join_image.resize(new_size, resample = 3), (new_size[0], 0))
+			new_image.show()
+			if utility.savechanges():
+				filename = input("Save File as (filename + extension) : ")
+				new_image.save(filename, format = "jpeg")
+			self.options()
