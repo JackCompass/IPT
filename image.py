@@ -4,6 +4,8 @@ from PIL import Image
 import os
 import processor
 from sys import exit
+import utility
+
 
 def _select_image():
 	""" Takes image path as input. """
@@ -21,4 +23,7 @@ def _select_image():
 
 if __name__ == "__main__":
 	
-	_select_image()
+	try :
+		_select_image()
+	except KeyboardInterrupt:
+		utility.trigger_exit()

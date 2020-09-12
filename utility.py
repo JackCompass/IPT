@@ -1,3 +1,6 @@
+from sys import exit
+import time
+
 def savechanges():
 		try:
 			flag = int(input("Process change : "))
@@ -72,3 +75,9 @@ def check(size):
 			if not 0 <= size1D <= 265:
 				raise ValueError("Size should be in [0, 265] range.")
 		return size
+
+def trigger_exit():
+	"""Initiates the exit sequence."""
+	print('\nExiting Software...!')
+	time.sleep(0.3)
+	exit(1)
