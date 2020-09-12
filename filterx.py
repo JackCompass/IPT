@@ -22,8 +22,9 @@ class Filter:
 		print("6-> Greyscale")
 		print("7-> Solarize")
 		print("8-> Black & White")
+		print("9-> Sepia")
 		choice = int(input("choice : "))
-		if choice < 1 or choice > 8:
+		if choice < 1 or choice > 9:
 			raise ValueError
 		else:
 			self._filter_controller(choice)
@@ -45,6 +46,8 @@ class Filter:
 			self.Solarize()
 		elif choice == 8:
 			self.blackwhite()
+		elif choice == 9:
+			self.sepia()
 
 	def _Blur(self):
 		self.image.filter(ImageFilter.EDGE_ENHANCE).show()
@@ -125,6 +128,22 @@ class Filter:
 				color = pixel[x, y]
 				avg_color = color[0] + color[1] + color[2]
 				pixel[x, y] = (avg_color, avg_color, avg_color)
+
+		copy_image.show()
+		if utility.savechanges():
+			self.image = copy_image
+		self.Options()
+
+	def sepia(self):
+		copy_image = self.image.copy()
+		pixel = copy_image.load()	
+		for x in range(copy_image.width):
+			for y in range(copy_image.height):
+				color = pixel[x, y]
+				avg_red = int((.393 * color[0]) + (.769 * color[1]) + (.189 * color[2]))
+				avg_green = int((.349 * color[0]) + (.686 * color[1]) + (.168 * color[2]))
+				avg_blue = int((.272 * color[0]) + (.534 * color[1]) + (.131 * color[2]))
+				pixel[x, y] = (avg_red, avg_green, avg_blue)
 
 		copy_image.show()
 		if utility.savechanges():
