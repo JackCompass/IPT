@@ -1,4 +1,4 @@
-from PIL import ImageFilter, ImageOps
+from PIL import ImageFilter, ImageOps, Image
 import random
 import utility
 
@@ -21,9 +21,9 @@ class Filter:
 		print("5-> MinFilter")
 		print("6-> Greyscale")
 		print("7-> Solarize")
-
+		print("8-> Black & White")
 		choice = int(input("choice : "))
-		if choice < 1 or choice > 7:
+		if choice < 1 or choice > 8:
 			raise ValueError
 		else:
 			self._filter_controller(choice)
@@ -43,6 +43,8 @@ class Filter:
 			self.greyscale()
 		elif choice == 7:
 			self.Solarize()
+		elif choice == 8:
+			self.blackwhite()
 
 	def _Blur(self):
 		self.image.filter(ImageFilter.EDGE_ENHANCE).show()
@@ -115,4 +117,16 @@ class Filter:
 			self.image = ImageOps.Solarize(self.image, threshold)
 		self.Options()
 
-	
+	def blackwhite(self):
+		copy_image = self.image.copy()
+		pixel = copy_image.load()
+		for x in range(copy_image.width):
+			for y in range(copy_image.height):
+				color = pixel[x, y]
+				avg_color = color[0] + color[1] + color[2]
+				pixel[x, y] = (avg_color, avg_color, avg_color)
+
+		copy_image.show()
+		if utility.savechanges():
+			self.image = copy_image
+		self.Options()
