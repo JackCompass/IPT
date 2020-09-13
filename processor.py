@@ -17,15 +17,14 @@ class Picture:
 		print("-------------------")
 		print("1-> Rotate")
 		print("2-> Resize")
-		print("3-> Spread Effect")
-		print("4-> Save")
-		print("5-> Filter")
-		print("6-> Flip")
-		print("7-> Invert")
-		print("8-> Mirror")
-		print("9-> Add Border")
-		print("10-> Merge")
-
+		print("3-> Crop")
+		print("4-> Flip")
+		print("5-> Invert")
+		print("6-> Mirror")
+		print("7-> Add Border")
+		print("8-> Merge")
+		print("9-> Filter")
+		print("10-> Save")
 
 		choice = int(input("choice : "))
 		if choice < 1 or choice > 10:
@@ -39,21 +38,21 @@ class Picture:
 		elif choice == 2:
 			self.resize()
 		elif choice == 3:
-			self.spread_effect()
+			self._crop()
 		elif choice == 4:
-			self._save()
-		elif choice == 5:
-			self._filter()
-		elif choice == 6:
 			self.flip()
-		elif choice == 7:
+		elif choice == 5:
 			self._invert()
-		elif choice == 8:
+		elif choice == 6:
 			self._mirror()
-		elif choice == 9:
+		elif choice == 7:
 			self.border()
-		elif choice == 10:
+		elif choice == 8:
 			self.merge()
+		elif choice == 9:
+			filterx.Filter(self.image)
+		elif choice == 10:
+			self._save()
 
 	def _save(self):
 		filename = input("Save File as (filename + extension) : ")
@@ -80,11 +79,12 @@ class Picture:
 			self.image = self.image.resize(size, resample = 3)
 		self.options()
 
-	def spread_effect(self):
-		spread_distance = int(input("Spread Effect : "))
-		self.image.effect_spread(spread_distance).show()
+	def _crop(self):
+		size = list(input("Enter size (left, upper, right, lower) : ").split(" "))
+		size = [int(x) for x in size]
+		self.image.crop(size).show()
 		if utility.savechanges():
-			self.image = self.image.effect_spread(spread_distance)
+			self.image = self.image.crop(size)
 		self.options()
 
 	def _filter(self):

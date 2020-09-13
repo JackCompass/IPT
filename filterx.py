@@ -23,8 +23,10 @@ class Filter:
 		print("7-> Solarize")
 		print("8-> Black & White")
 		print("9-> Sepia")
+		print("10-> Spread Effect")
 		choice = int(input("choice : "))
-		if choice < 1 or choice > 9:
+
+		if choice < 1 or choice > 10:
 			raise ValueError
 		else:
 			self._filter_controller(choice)
@@ -48,6 +50,8 @@ class Filter:
 			self.blackwhite()
 		elif choice == 9:
 			self.sepia()
+		elif choice == 10:
+			self.spread_effect()
 
 	def _Blur(self):
 		self.image.filter(ImageFilter.EDGE_ENHANCE).show()
@@ -92,6 +96,13 @@ class Filter:
 		if utility.savechanges():
 			self.image = self.image.filter(ImageFilter.GaussianBlur(radius))
 		self.Options()
+
+	def spread_effect(self):
+		spread_distance = int(input("Spread Effect : "))
+		self.image.effect_spread(spread_distance).show()
+		if utility.savechanges():
+			self.image = self.image.effect_spread(spread_distance)
+		self.options()
 
 	def kernel(self):
 		kernel = utility.apply_kernel()
