@@ -136,7 +136,7 @@ class Picture:
 			else:
 				new_size.append(join_image.height)
 
-			new_image = Image.new("RGB", (2*new_size[0], new_size[1]), (250, 250, 250))
+			new_image = Image.new("RGB", (new_size[0] + new_size[1], new_size[1]), (250, 250, 250))
 			new_image.paste(self.image.resize(new_size, resample = 3), (0, 0))
 			new_image.paste(join_image.resize(new_size, resample = 3), (new_size[0], 0))
 			new_image.show()
